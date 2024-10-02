@@ -2,6 +2,7 @@ import secrets  # Use secrets for secure randomness
 import argparse
 import re
 import glob
+import random  # Import random for sample function
 
 # Color codes
 RED = "\033[31m"
@@ -60,7 +61,7 @@ def capitalize_random_characters(passphrase):
     passphrase_list = list(passphrase)
     
     # Randomly select indices to capitalize
-    indices_to_capitalize = secrets.sample(range(total_chars), num_to_capitalize)
+    indices_to_capitalize = random.sample(range(total_chars), num_to_capitalize)
     
     for index in indices_to_capitalize:
         passphrase_list[index] = passphrase_list[index].upper()  # Capitalize the character
@@ -72,7 +73,7 @@ def generate_passphrase(word_list, num_words=4, use_special_chars=False):
         raise ValueError("Not enough unique words in the list.")
     
     while True:
-        selected_words = secrets.sample(word_list, num_words)  # Use secrets for secure random selection
+        selected_words = random.sample(word_list, num_words)  # Use random.sample for secure random selection
         
         # Randomly capitalize the first letter of each word
         passphrase_parts = [
@@ -86,7 +87,7 @@ def generate_passphrase(word_list, num_words=4, use_special_chars=False):
             num_special_words = secrets.randbelow(max_special_words) + 1  # At least 1 word
             
             # Randomly select which words to replace
-            special_indices = secrets.sample(range(num_words), num_special_words)
+            special_indices = random.sample(range(num_words), num_special_words)
             for index in special_indices:
                 passphrase_parts[index] = replace_vowels(passphrase_parts[index])
         
