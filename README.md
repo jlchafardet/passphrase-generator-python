@@ -68,7 +68,6 @@ This command generates a passphrase consisting of 5 words, including special cha
 ## Future Improvements
 
 - **Graphical User Interface (GUI)**: Consider creating a simple GUI for users who may not be comfortable with command-line operations.
-- **Logging and History**: Implement logging to keep track of generated passphrases for user reference, with options to save or export them securely.
 - **Internationalization**: Support multiple languages for the word list and user interface to cater to a broader audience.
 
 ## License
