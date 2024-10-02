@@ -1,4 +1,6 @@
 import re
+import glob
+import os
 
 def remove_special_characters(word_list):
     """Remove special characters from each word."""
@@ -40,12 +42,18 @@ def remove_common_words(word_list, common_words):
     """Remove common words from the list."""
     return [word for word in word_list if word not in common_words]
 
-def clean_word_list(input_file, output_file, common_words=[]):
+def clean_word_list(file_path, common_words=[]):
     """Main function to clean the word list."""
-    with open(input_file, 'r') as file:
-        word_list = file.readlines()
+    try:
+        with open(file_path, 'r') as file:
+            word_list = file.readlines()
+    except FileNotFoundError:
+        return f"{file_path} not found. Please check the file path."
+    except Exception as e:
+        return f"An unexpected error occurred while reading {file_path}: {e}"
 
     # Apply cleaning methods
+    original_length = len(word_list)
     word_list = remove_special_characters(word_list)
     word_list = convert_to_lowercase(word_list)
     word_list = trim_spaces(word_list)
@@ -57,16 +65,28 @@ def clean_word_list(input_file, output_file, common_words=[]):
     word_list = filter_by_length(word_list)
     word_list = remove_common_words(word_list, common_words)
 
-    # Write cleaned word list to output file
-    with open(output_file, 'w') as file:
-        for word in word_list:
-            file.write(f"{word}\n")
+    # Check if any changes were made
+    if len(word_list) != original_length:
+        try:
+            with open(file_path, 'w') as file:
+                for word in word_list:
+                    file.write(f"{word}\n")
+            return f"Cleaned {file_path}"
+        except Exception as e:
+            return f"An unexpected error occurred while writing to {file_path}: {e}"
+    else:
+        return f"{file_path} didn't need any cleaning up."
 
 if __name__ == "__main__":
-    # Example usage
-    input_file = 'input_wordlist.txt'  # Replace with your input file
-    output_file = 'cleaned_wordlist.txt'  # Output file for cleaned words
-    common_words = ['hola', 'adios', 'gracias', 'mama', 'papa', 'hijo', 'hija', 'tia', 'tio', 'soy', 'que', 'tal', 'muy', 'asi', 'mal', 'por', 'que', 'ver']  # Updated common words list
+    # Common words to remove
+    common_words = ['hola', 'adios', 'gracias', 'mama', 'papa', 'hijo', 'hija', 'tia', 'tio', 'soy', 'que', 'tal', 'muy', 'asi', 'mal', 'por', 'que', 'ver']
 
-    clean_word_list(input_file, output_file, common_words)
-    print(f"Cleaned word list has been saved to {output_file}.")
+    # Iterate through all wordlist files
+    log = []
+    for file_path in glob.glob('words-*.txt'):
+        result = clean_word_list(file_path, common_words)
+        log.append(result)
+
+    # Print log results
+    for entry in log:
+        print(entry)
