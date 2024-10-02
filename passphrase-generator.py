@@ -154,7 +154,7 @@ if __name__ == "__main__":
         
         # Output based on language
         if language == 'es':
-            print(f"{BLUE}Fraseeclave Generada: {WHITE}{passphrase}{RESET}")
+            print(f"{BLUE}Fraseclave Generada: {WHITE}{passphrase}{RESET}")
             strength = assess_strength(passphrase, language='es')
             print(f"{BLUE}Esta fraseclave se considera: {strength}{RESET}")
         else:
