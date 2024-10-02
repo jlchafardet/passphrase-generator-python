@@ -2,6 +2,14 @@ import random
 import argparse
 import re
 
+# Color codes
+RED = "\033[31m"
+ORANGE = "\033[33m"
+GREEN = "\033[32m"
+BLUE = "\033[34m"
+WHITE = "\033[37m"
+RESET = "\033[0m"
+
 # Create a translation table for vowel replacement
 vowel_replacements = str.maketrans('aeiou', '@31µ0')
 
@@ -10,10 +18,10 @@ def load_word_list(file_path):
         with open(file_path, 'r') as file:
             return [line.strip() for line in file.readlines()]
     except FileNotFoundError:
-        print(f"Error: The file '{file_path}' was not found.")
+        print(f"{RED}Error: The file '{file_path}' was not found.{RESET}")
         exit(1)
     except Exception as e:
-        print(f"An unexpected error occurred while loading the word list: {e}")
+        print(f"{RED}An unexpected error occurred while loading the word list: {e}{RESET}")
         exit(1)
 
 def replace_vowels(word):
@@ -31,15 +39,15 @@ def assess_strength(passphrase):
 
     # Determine strength based on character types
     if character_types == 0:
-        return "Very Weak"
+        return f"{RED}Very Weak{RESET}"
     elif character_types == 1:
-        return "Weak"
+        return f"{RED}Weak{RESET}"
     elif character_types == 2:
-        return "Normal"
+        return f"{ORANGE}Normal{RESET}"
     elif character_types == 3:
-        return "Strong"
+        return f"{GREEN}Strong{RESET}"
     else:
-        return "Very Strong"
+        return f"{GREEN}Very Strong{RESET}"
 
 def capitalize_random_characters(passphrase):
     total_chars = len(passphrase)
@@ -103,49 +111,49 @@ if __name__ == "__main__":
     # Check if num_words is provided
     if args.num_words is None:
         parser.print_usage()
-        print("Error: The number of words is required.")
+        print(f"{RED}Error: The number of words is required.{RESET}")
         exit(1)
 
     try:
         # User Input Validation
         if args.num_words < 2:
-            print("Error: Minimum words for the passphrase generated is 2.")
+            print(f"{RED}Error: Minimum words for the passphrase generated is 2.{RESET}")
             parser.print_usage()
             exit(1)
         
         if args.num_words > 16:
-            print("Error: The maximum number of words for the passphrase is 16.")
+            print(f"{RED}Error: The maximum number of words for the passphrase is 16.{RESET}")
             parser.print_usage()
             exit(1)
 
         if args.num_words <= 0:
-            print("Error: The number of words must be a positive integer.")
+            print(f"{RED}Error: The number of words must be a positive integer.{RESET}")
             parser.print_usage()
             exit(1)
         
         word_list = load_word_list('words-en.txt')  # Ensure this is in the same directory
         if args.num_words > len(word_list):
-            print("Error: Not enough unique words in the list.")
+            print(f"{RED}Error: Not enough unique words in the list.{RESET}")
             exit(1)
         
         # Convert special_chars argument to boolean
         if args.special_chars.lower() not in ['true', 'false']:
-            print("Error: The special_chars argument must be 'true' or 'false'.")
+            print(f"{RED}Error: The special_chars argument must be 'true' or 'false'.{RESET}")
             parser.print_usage()
             exit(1)
         
         use_special_chars = args.special_chars.lower() == 'true'
         
         passphrase = generate_passphrase(word_list, num_words=args.num_words, use_special_chars=use_special_chars)
-        print("Generated Passphrase:", passphrase)
+        print(f"{BLUE}Generated Passphrase: {WHITE}{passphrase}{RESET}")
 
         # Assess the strength of the generated passphrase
         strength = assess_strength(passphrase)
-        print(f"This passphrase is considered: {strength}")  # Updated print statement
+        print(f"{BLUE}This passphrase is considered: {strength}{RESET}")
 
     except ValueError as ve:
-        print(f"Error: {ve}")
+        print(f"{RED}Error: {ve}{RESET}")
         exit(1)
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"{RED}An unexpected error occurred: {e}{RESET}")
         exit(1)

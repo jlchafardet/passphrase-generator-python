@@ -63,6 +63,7 @@ This command generates a passphrase consisting of 5 words, including special cha
 
 5. **General Improvements**:
    - Improved overall code structure and readability.
+   - Added color-coded output for better user experience, with specific colors for errors, strength levels, and passphrase display.
 
 ## Future Improvements
 
