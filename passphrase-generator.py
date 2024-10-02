@@ -1,4 +1,4 @@
-import random
+import secrets  # Use secrets for secure randomness
 import argparse
 import re
 import glob
@@ -54,13 +54,13 @@ def assess_strength(passphrase, language='en'):
 def capitalize_random_characters(passphrase):
     total_chars = len(passphrase)
     max_capitalize = total_chars // 2  # Half of the total characters
-    num_to_capitalize = random.randint(1, max_capitalize)  # At least 1, up to half
+    num_to_capitalize = secrets.randbelow(max_capitalize) + 1  # At least 1, up to half
 
     # Convert passphrase to a list to modify it
     passphrase_list = list(passphrase)
     
     # Randomly select indices to capitalize
-    indices_to_capitalize = random.sample(range(total_chars), num_to_capitalize)
+    indices_to_capitalize = secrets.sample(range(total_chars), num_to_capitalize)
     
     for index in indices_to_capitalize:
         passphrase_list[index] = passphrase_list[index].upper()  # Capitalize the character
@@ -72,21 +72,21 @@ def generate_passphrase(word_list, num_words=4, use_special_chars=False):
         raise ValueError("Not enough unique words in the list.")
     
     while True:
-        selected_words = random.sample(word_list, num_words)
+        selected_words = secrets.sample(word_list, num_words)  # Use secrets for secure random selection
         
         # Randomly capitalize the first letter of each word
         passphrase_parts = [
-            (word.capitalize() if random.choice([True, False]) else word)
+            (word.capitalize() if secrets.randbelow(2) else word)
             for word in selected_words
         ]
         
         # Determine how many words will have special characters replaced
         if use_special_chars:
             max_special_words = num_words // 2  # Maximum half of the selected words
-            num_special_words = random.randint(1, max_special_words)  # At least 1 word
+            num_special_words = secrets.randbelow(max_special_words) + 1  # At least 1 word
             
             # Randomly select which words to replace
-            special_indices = random.sample(range(num_words), num_special_words)
+            special_indices = secrets.sample(range(num_words), num_special_words)
             for index in special_indices:
                 passphrase_parts[index] = replace_vowels(passphrase_parts[index])
         
