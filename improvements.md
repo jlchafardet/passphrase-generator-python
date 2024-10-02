@@ -20,8 +20,9 @@
   - Implement logging to keep track of generated passphrases for user reference, with options to save or export them securely.
   - Allow users to view a history of generated passphrases during the session.
 
-- Strength Assessment
-  - Add a feature to assess the strength of the generated passphrase and provide feedback or suggestions for improvement.
+- ~~Strength Assessment~~
+  - ~~Add a feature to assess the strength of the generated passphrase and provide feedback or suggestions for improvement.~~
+  - ~~Implement random capitalization of characters to enhance passphrase strength.~~
 
 - Testing and Documentation
   - Create unit tests to ensure the functionality works as expected and to validate edge cases.

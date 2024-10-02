@@ -19,6 +19,44 @@ def load_word_list(file_path):
 def replace_vowels(word):
     return word.translate(vowel_replacements)
 
+def assess_strength(passphrase):
+    length_score = len(passphrase) >= 12  # Length should be at least 12 characters
+    upper_case = any(c.isupper() for c in passphrase)
+    lower_case = any(c.islower() for c in passphrase)
+    digits = any(c.isdigit() for c in passphrase)
+    special_chars = any(c in '@#$%^&*()_+!~`' for c in passphrase)  # Define special characters
+
+    # Count the number of character types present
+    character_types = sum([length_score, upper_case, lower_case, digits, special_chars])
+
+    # Determine strength based on character types
+    if character_types == 0:
+        return "Very Weak"
+    elif character_types == 1:
+        return "Weak"
+    elif character_types == 2:
+        return "Normal"
+    elif character_types == 3:
+        return "Strong"
+    else:
+        return "Very Strong"
+
+def capitalize_random_characters(passphrase):
+    total_chars = len(passphrase)
+    max_capitalize = total_chars // 2  # Half of the total characters
+    num_to_capitalize = random.randint(1, max_capitalize)  # At least 1, up to half
+
+    # Convert passphrase to a list to modify it
+    passphrase_list = list(passphrase)
+    
+    # Randomly select indices to capitalize
+    indices_to_capitalize = random.sample(range(total_chars), num_to_capitalize)
+    
+    for index in indices_to_capitalize:
+        passphrase_list[index] = passphrase_list[index].upper()  # Capitalize the character
+
+    return ''.join(passphrase_list)  # Join the list back into a string
+
 def generate_passphrase(word_list, num_words=4, use_special_chars=False):
     if num_words > len(word_list):
         raise ValueError("Not enough unique words in the list.")
@@ -44,6 +82,9 @@ def generate_passphrase(word_list, num_words=4, use_special_chars=False):
         
         # Join the parts into a single passphrase
         passphrase = ' '.join(passphrase_parts)
+        
+        # Capitalize random characters in the passphrase
+        passphrase = capitalize_random_characters(passphrase)
         
         # Validate passphrase length
         if len(passphrase) > 100:
@@ -97,6 +138,10 @@ if __name__ == "__main__":
         
         passphrase = generate_passphrase(word_list, num_words=args.num_words, use_special_chars=use_special_chars)
         print("Generated Passphrase:", passphrase)
+
+        # Assess the strength of the generated passphrase
+        strength = assess_strength(passphrase)
+        print(f"This passphrase is considered: {strength}")  # Updated print statement
 
     except ValueError as ve:
         print(f"Error: {ve}")
