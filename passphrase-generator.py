@@ -2,44 +2,105 @@ import random
 import argparse
 import re
 
-def load_word_list(file_path):
-    with open(file_path, 'r') as file:
-        return [line.strip() for line in file.readlines()]
+# Create a translation table for vowel replacement
+vowel_replacements = str.maketrans('aeiou', '@31µ0')
 
-def replace_vowels(word, use_special_chars):
-    if not use_special_chars:
-        return word
-    replacements = {'a': '@', 'e': '3', 'i': '1', 'o': '0', 'u': 'µ'}
-    return ''.join(replacements.get(char, char) for char in word)
+def load_word_list(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            return [line.strip() for line in file.readlines()]
+    except FileNotFoundError:
+        print(f"Error: The file '{file_path}' was not found.")
+        exit(1)
+    except Exception as e:
+        print(f"An unexpected error occurred while loading the word list: {e}")
+        exit(1)
+
+def replace_vowels(word):
+    return word.translate(vowel_replacements)
 
 def generate_passphrase(word_list, num_words=4, use_special_chars=False):
     if num_words > len(word_list):
         raise ValueError("Not enough unique words in the list.")
     
-    selected_words = random.sample(word_list, num_words)
-    
-    # Randomly capitalize the first letter of each word
-    passphrase = ' '.join(
-        word.capitalize() if random.choice([True, False]) else word
-        for word in selected_words
-    )
-    
-    # Replace vowels with special characters if specified
-    passphrase = ' '.join(replace_vowels(word, use_special_chars) for word in passphrase.split())
-    
-    return passphrase
+    while True:
+        selected_words = random.sample(word_list, num_words)
+        
+        # Randomly capitalize the first letter of each word
+        passphrase_parts = [
+            (word.capitalize() if random.choice([True, False]) else word)
+            for word in selected_words
+        ]
+        
+        # Determine how many words will have special characters replaced
+        if use_special_chars:
+            max_special_words = num_words // 2  # Maximum half of the selected words
+            num_special_words = random.randint(1, max_special_words)  # At least 1 word
+            
+            # Randomly select which words to replace
+            special_indices = random.sample(range(num_words), num_special_words)
+            for index in special_indices:
+                passphrase_parts[index] = replace_vowels(passphrase_parts[index])
+        
+        # Join the parts into a single passphrase
+        passphrase = ' '.join(passphrase_parts)
+        
+        # Validate passphrase length
+        if len(passphrase) > 100:
+            raise ValueError("The passphrase cannot exceed 100 characters.")
+        if len(passphrase) > 10:  # Only check for minimum length
+            return passphrase
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate a secure passphrase.')
-    parser.add_argument('num_words', type=int, help='Number of words in the passphrase')
+    parser.add_argument('num_words', type=int, nargs='?', help='Number of words in the passphrase')
     parser.add_argument('special_chars', type=str, nargs='?', default='false', 
                         help='Use special characters (true/false)')
 
     args = parser.parse_args()
-    
-    # Convert special_chars argument to boolean
-    use_special_chars = args.special_chars.lower() == 'true'
-    
-    word_list = load_word_list('words-en.txt')  # Ensure this is in the same directory
-    passphrase = generate_passphrase(word_list, num_words=args.num_words, use_special_chars=use_special_chars)
-    print("Generated Passphrase:", passphrase)
+
+    # Check if num_words is provided
+    if args.num_words is None:
+        parser.print_usage()
+        print("Error: The number of words is required.")
+        exit(1)
+
+    try:
+        # User Input Validation
+        if args.num_words < 2:
+            print("Error: Minimum words for the passphrase generated is 2.")
+            parser.print_usage()
+            exit(1)
+        
+        if args.num_words > 16:
+            print("Error: The maximum number of words for the passphrase is 16.")
+            parser.print_usage()
+            exit(1)
+
+        if args.num_words <= 0:
+            print("Error: The number of words must be a positive integer.")
+            parser.print_usage()
+            exit(1)
+        
+        word_list = load_word_list('words-en.txt')  # Ensure this is in the same directory
+        if args.num_words > len(word_list):
+            print("Error: Not enough unique words in the list.")
+            exit(1)
+        
+        # Convert special_chars argument to boolean
+        if args.special_chars.lower() not in ['true', 'false']:
+            print("Error: The special_chars argument must be 'true' or 'false'.")
+            parser.print_usage()
+            exit(1)
+        
+        use_special_chars = args.special_chars.lower() == 'true'
+        
+        passphrase = generate_passphrase(word_list, num_words=args.num_words, use_special_chars=use_special_chars)
+        print("Generated Passphrase:", passphrase)
+
+    except ValueError as ve:
+        print(f"Error: {ve}")
+        exit(1)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        exit(1)

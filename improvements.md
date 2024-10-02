@@ -1,8 +1,8 @@
 # Improvements for Passphrase Generator
 
-- User Input Validation
-  - Implement validation for the `num_words` argument to ensure it is a positive integer and does not exceed the number of available words in the list.
-  - Validate the `special_chars` argument to ensure it only accepts 'true' or 'false'.
+- ~~User Input Validation~~
+  - ~~Implement validation for the `num_words` argument to ensure it is a positive integer and does not exceed the number of available words in the list.~~
+  - ~~Validate the `special_chars` argument to ensure it only accepts 'true' or 'false'.~~
 
 - Enhanced Word List Management
   - Allow users to specify a custom word list file via command-line arguments, providing flexibility in word selection.
@@ -27,11 +27,11 @@
   - Create unit tests to ensure the functionality works as expected and to validate edge cases.
   - Update the README.md file to include detailed usage instructions, examples, and explanations of the new features.
 
-- Error Handling
-  - Implement robust error handling to manage potential issues, such as file not found errors or invalid input formats, and provide user-friendly error messages.
+- ~~Error Handling~~
+  - ~~Implement robust error handling to manage potential issues, such as file not found errors or invalid input formats, and provide user-friendly error messages.~~
 
 - Internationalization
   - Consider supporting multiple languages for the word list and user interface to cater to a broader audience.
 
-- Performance Optimization
-  - Analyze the performance of the word selection and passphrase generation process, optimizing for larger word lists or more complex generation criteria.
+- ~~Performance Optimization~~
+  - ~~Analyze the performance of the word selection and passphrase generation process, optimizing for larger word lists or more complex generation criteria.~~
