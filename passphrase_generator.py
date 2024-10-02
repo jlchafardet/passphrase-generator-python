@@ -41,16 +41,8 @@ def load_word_list(language):
         exit(1)  # Exit the program with an error code
 
 def replace_vowels(word):
-    """
-    Replace vowels in a word with special characters.
-
-    Parameters:
-    word (str): The word in which vowels will be replaced.
-
-    Returns:
-    str: The word with vowels replaced by special characters.
-    """
-    return word.translate(vowel_replacements)  # Use the translation table to replace vowels
+    # Create a translation table for replacing vowels with special characters
+    return word.translate(str.maketrans('aeio', '@310'))  # Exclude 'u' from replacement
 
 def assess_strength(passphrase, language='en'):
     """
@@ -63,7 +55,6 @@ def assess_strength(passphrase, language='en'):
     Returns:
     str: A string indicating the strength of the passphrase.
     """
-    # Check if the passphrase meets the minimum length requirement
     length_score = len(passphrase) >= 12  # Length should be at least 12 characters
     upper_case = any(c.isupper() for c in passphrase)  # Check for uppercase letters
     lower_case = any(c.islower() for c in passphrase)  # Check for lowercase letters
@@ -74,16 +65,16 @@ def assess_strength(passphrase, language='en'):
     character_types = sum([length_score, upper_case, lower_case, digits, special_chars])
 
     # Determine strength based on the number of character types
-    if character_types == 0:
-        return "Muy Débil" if language == 'es' else "Very Weak"  # Very weak
+    if len(passphrase) < 8:  # Adjust minimum length for 'Very Weak'
+        return "Very Weak" if language == 'es' else "Very Weak"
     elif character_types == 1:
-        return "Débil" if language == 'es' else "Weak"  # Weak
+        return "Weak" if language == 'es' else "Weak"
     elif character_types == 2:
         return "Normal"  # Normal strength
     elif character_types == 3:
-        return "Fuerte" if language == 'es' else "Strong"  # Strong
+        return "Strong" if language == 'es' else "Strong"
     else:
-        return "Muy Fuerte" if language == 'es' else "Very Strong"  # Very strong
+        return "Very Strong" if language == 'es' else "Very Strong"
 
 def capitalize_random_characters(passphrase):
     """
