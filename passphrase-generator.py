@@ -116,6 +116,9 @@ if __name__ == "__main__":
 
     try:
         # User Input Validation
+        if not isinstance(args.num_words, int):
+            raise ValueError("The number of words must be an integer.")
+        
         if args.num_words < 2:
             print(f"{RED}Error: Minimum words for the passphrase generated is 2.{RESET}")
             parser.print_usage()
