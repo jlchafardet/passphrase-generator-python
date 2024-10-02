@@ -1,5 +1,7 @@
 # Passphrase Generator
 
+![screenshot](https://i.imgur.com/3bxgPeB.png)
+
 ## Overview
 
 The Passphrase Generator is a command-line tool that generates secure and memorable passphrases. It allows users to customize the number of words, include special characters, and assess the strength of the generated passphrase.
