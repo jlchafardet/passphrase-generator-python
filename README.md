@@ -6,44 +6,55 @@ The Passphrase Generator is a command-line tool that generates secure and memora
 
 ## Features
 
-- **User Input Validation**: Ensures that the number of words is a positive integer and does not exceed the available words in the list. Validates the `special_chars` argument to accept only 'true' or 'false'.
-- **Custom Word List**: Users can specify a custom word list file via command-line arguments, providing flexibility in word selection.
+- **User Input Validation**: 
+  - Ensures that the number of words is a positive integer and does not exceed the available words in the list.
+  - Validates the `special_chars` argument to accept only 'true' or 'false'.
+
+- **Custom Word List**: 
+  - Users can specify a custom word list file via command-line arguments, providing flexibility in word selection.
+
 - **Passphrase Complexity Options**:
   - Generates passphrases with a specified number of words (between 2 and 16).
   - Allows the inclusion of special characters in the passphrase.
+
 - **Strength Assessment**:
   - Evaluates the strength of the generated passphrase based on length and character variety (uppercase, lowercase, digits, special characters).
   - Provides feedback on the strength of the passphrase (Very Weak, Weak, Normal, Strong, Very Strong).
-- **Random Capitalization**: Randomly capitalizes a number of characters in the passphrase to enhance its strength, ensuring at least one character is capitalized and no more than half of the total characters.
-- **Error Handling**: Robust error handling to manage potential issues, such as file not found errors or invalid input formats, with user-friendly error messages.
+
+- **Random Capitalization**: 
+  - Randomly capitalizes a number of characters in the passphrase to enhance its strength, ensuring at least one character is capitalized and no more than half of the total characters.
+
+- **Error Handling**: 
+  - Robust error handling to manage potential issues, such as file not found errors or invalid input formats, with user-friendly error messages.
 
 ## Usage
 
 To run the Passphrase Generator, use the following command in your terminal:
 
 ```bash
-python passphrase-generator.py <num_words> <special_chars>
+python passphrase-generator.py <num_words> <special_chars> [language]
 ```
 
 ### Parameters
 
 - `<num_words>`: The number of words to include in the passphrase (between 2 and 16).
 - `<special_chars>`: Specify 'true' to include special characters or 'false' to exclude them.
+- `[language]`: (Optional) Specify 'es' for Spanish or 'en' for English. English is the default language if not specified.
 
 ### Example
 
 ```bash
-python passphrase-generator.py 5 true
+python passphrase-generator.py 5 true en
 ```
 
-This command generates a passphrase consisting of 5 words, including special characters.
+This command generates a passphrase consisting of 5 words, including special characters, in English.
 
 ## Requirements
 
 - Python 3.x
 - A text file containing a list of words (e.g., `words-en.txt`) in the same directory as the script.
 
-# Changes Made to Passphrase Generator
+## Changes Made to Passphrase Generator
 
 1. **User Input Validation**:
    - Implemented validation for `num_words` to ensure it is a positive integer and does not exceed the number of available words.
@@ -58,7 +69,7 @@ This command generates a passphrase consisting of 5 words, including special cha
 
 4. **Passphrase Generation Logic**:
    - Implemented continuous generation of passphrases until the total character count exceeds 10.
-   - Ensured the passphrase does not exceed 100 characters and does not exceed 16 words.
+   - Ensured the passphrase does not exceed 127 characters and does not exceed 16 words.
    - Modified special character replacement to ensure at least one word is replaced and a maximum of half the selected words.
 
 5. **General Improvements**:
@@ -67,8 +78,11 @@ This command generates a passphrase consisting of 5 words, including special cha
 
 ## Future Improvements
 
-- **Graphical User Interface (GUI)**: Consider creating a simple GUI for users who may not be comfortable with command-line operations.
-- **Internationalization**: Support multiple languages for the word list and user interface to cater to a broader audience.
+- **Graphical User Interface (GUI)**: 
+  - Consider creating a simple GUI for users who may not be comfortable with command-line operations.
+
+- **Internationalization**: 
+  - Support multiple languages for the word list and user interface to cater to a broader audience.
 
 ## License
 
